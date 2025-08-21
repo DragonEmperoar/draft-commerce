@@ -395,7 +395,7 @@ async def create_order(order_data: OrderCreate, user: User = Depends(require_aut
         coupon = await db.coupons.find_one({
             "code": order_data.coupon_code,
             "active": True,
-            "used_count": {"$lt": coupon.usage_limit}
+            "used_count": {"$lt": "$usage_limit"}
         })
         if coupon and (not coupon.get("expires_at") or coupon["expires_at"] > datetime.now(timezone.utc)):
             if coupon["discount_type"] == "percentage":
